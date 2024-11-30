@@ -8,7 +8,7 @@ import { User } from '../../../../entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(user: User): Promise<User> {
@@ -21,6 +21,10 @@ export class UserService {
 
   async findOne(id: ObjectId): Promise<User> {
     return this.userRepository.findOneBy({ id });
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ email });
   }
 
   async update(id: ObjectId, user: Partial<User>): Promise<User> {
