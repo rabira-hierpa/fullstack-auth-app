@@ -3,28 +3,50 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { passwordStrength } from 'check-password-strength';
 import * as crypto from 'crypto';
-import { User } from 'src/entities/user.entity';
+import * as jwt from 'jsonwebtoken';
+import { UserEntity } from 'src/entities/user.entity';
+import { WinstonLoggerService } from 'src/logger/service/logger.service';
+import { userToUserDecodeDto } from 'src/shared/helper/class-transformer';
+import {
+  createAccessToken,
+  createRefreshToken,
+} from 'src/shared/helper/jwt.healper';
 import { Repository } from 'typeorm';
 import { UserService } from '../../user/services/user.service';
+import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly logger: WinstonLoggerService,
   ) {}
   private generateToken() {
     return crypto.randomBytes(20).toString('hex');
   }
 
-  async validateUser(email: string, password: string): Promise<User | null> {
+  async validateRefreshToken(refreshToken: string) {
+    try {
+      return await jwt.verify(refreshToken, process.env.SECRET_KEY);
+    } catch (ex) {
+      throw new BadRequestException(ex.message);
+    }
+  }
+
+  async validateUserToken(payload: UserEntity): Promise<UserEntity> {
+    return await this.userRepo.findOne({ where: { id: payload.id } });
+  }
+
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserEntity | null> {
     const user = await this.userService.findByEmail(email);
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
@@ -32,14 +54,33 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User): Promise<{ access_token: string }> {
-    const payload = { email: user.email, sub: user.id };
+  async login(credentials: LoginDto) {
+    const user = await this.userRepo.findOne({
+      where: { email: credentials.email.toLowerCase() },
+    });
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    const isValid = await user.comparePassword(credentials.password);
+    if (!isValid) {
+      throw new BadRequestException('Invalid username or password');
+    }
+
+    const userData = userToUserDecodeDto(user);
+    const accessToken = createAccessToken(userData);
+    const refreshToken = createRefreshToken(userData);
+
+    user.token = accessToken.accessToken;
+
+    this.logger.log(`${user.email} logged in successfully`);
     return {
-      access_token: this.jwtService.sign(payload),
+      user: { ...userToUserDecodeDto(user) },
+      accessToken,
+      refreshToken,
     };
   }
 
-  async register(userDto: RegisterDto): Promise<User> {
+  async register(userDto: RegisterDto): Promise<UserEntity> {
     //check if user with this email already exists
     const existingUser = await this.userService.findByEmail(userDto.email);
     if (existingUser) {
@@ -52,7 +93,7 @@ export class AuthService {
       );
     }
     //TODO: Apply the password policy
-    if (passwordStrength(userDto.password).id < 2) {
+    if (passwordStrength(userDto.password).id < 1) {
       throw new BadRequestException('Password too weak');
     }
 
@@ -61,11 +102,8 @@ export class AuthService {
     const token = this.generateToken();
     userDto.token = token;
 
-    const hashedPassword = await bcrypt.hash(userDto.password, 10);
-    userDto.password = hashedPassword;
     // Register the user
-    let user = this.userRepo.create(userDto);
-    user = await this.userRepo.save(user);
+    const user = await this.userRepo.save(this.userRepo.create(userDto));
     return user;
   }
 }
