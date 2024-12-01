@@ -33,7 +33,7 @@ export class AuthService {
 
   async validateRefreshToken(refreshToken: string) {
     try {
-      return await jwt.verify(refreshToken, process.env.SECRET_KEY);
+      return jwt.verify(refreshToken, process.env.SECRET_KEY);
     } catch (ex) {
       throw new BadRequestException(ex.message);
     }
