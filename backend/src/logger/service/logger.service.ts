@@ -17,8 +17,7 @@ const logger = winston.createLogger({
             loggerFormat,
           ),
         })
-      : new winston.transports.File({
-          filename: 'error.log',
+      : new winston.transports.Console({
           level: 'debug',
           format: winston.format.combine(
             winston.format.colorize(),
