@@ -8,9 +8,10 @@ import { AppModule } from './app.module';
 import { WinstonLoggerService } from './logger/service/logger.service';
 
 async function bootstrap() {
+  const logger = new WinstonLoggerService();
   try {
     const app = await NestFactory.create(AppModule, {
-      logger: new WinstonLoggerService(),
+      logger,
     });
     app.enableVersioning({
       type: VersioningType.URI,
@@ -55,9 +56,9 @@ async function bootstrap() {
       allowedHeaders: '*',
     });
     await app.listen(process.env.PORT ?? 3000);
-    console.log(`Application is running on: ${await app.getUrl()}`);
+    logger.log(`Application is running on: ${await app.getUrl()}`);
   } catch (error) {
-    console.error('Error starting the application', error);
+    logger.error('Error starting the application', error);
   }
 }
 bootstrap();
