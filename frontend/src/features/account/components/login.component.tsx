@@ -39,6 +39,7 @@ const Login = () => {
           alert.error(formatErrorMessage(err));
         }
       );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       alert.error(formatErrorMessage(error));
     }
@@ -55,7 +56,7 @@ const Login = () => {
       }}
     >
       <TopHeader
-        className=" mb-4"
+        className=" mb-8"
         title="Welcome Back"
         caption="Enter your credentials to access your account."
       />
