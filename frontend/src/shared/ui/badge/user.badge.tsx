@@ -1,4 +1,7 @@
 import { Avatar, Dropdown, Menu } from "antd";
+import { AuthContext } from "../../context/auth.context";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 export const userNameInitials = (input: string) => {
   if (input) {
     const names = input?.split(" ");
@@ -21,6 +24,8 @@ const UserBadge = ({
   logout,
   menuItems = [],
 }: UserBadgeProps) => {
+  const { isAdmin } = useContext(AuthContext);
+  const navigate = useNavigate();
   const userBadgeContent = () => {
     return (
       <div className="flex items-center space-x-2 cursor-pointer">
@@ -56,7 +61,13 @@ const UserBadge = ({
           {typeof item === "function" ? item({}) : item}
         </Menu.Item>
       ))}
+      {}
       {menuItems?.length > 0 && <Menu.Divider key="divider" />}
+      {isAdmin && (
+        <Menu.Item key="admin" onClick={() => navigate("/admin")}>
+          <span>Admin</span>
+        </Menu.Item>
+      )}
       <Menu.Item onClick={logout} key="logout">
         <span>Logout</span>
       </Menu.Item>
