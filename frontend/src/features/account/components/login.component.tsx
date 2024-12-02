@@ -30,7 +30,11 @@ const Login = () => {
                 response?.accessToken?.expiresIn * 1000
               ).toString(),
             });
-            navigate("/dashboard");
+            if (authContext.isAdmin) {
+              navigate("/admin");
+            } else {
+              navigate("/dashboard");
+            }
           } else {
             alert.error("Failed to login user");
           }
