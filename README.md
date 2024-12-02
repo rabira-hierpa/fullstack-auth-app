@@ -34,6 +34,7 @@ This is a fullstack authentication application built with React, TailwindCSS, An
 
    ```sh
    npm install
+   cp .env.example .env # copy env variables
    ```
 
 3. Start the development server:
@@ -68,7 +69,7 @@ This is a fullstack authentication application built with React, TailwindCSS, An
 
    ```sh
    npm install
-   cp .env.example .env # opy
+   cp .env.example .env # copy env variables
    ```
 
 3. Set up the database:
