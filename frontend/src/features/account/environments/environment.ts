@@ -7,7 +7,7 @@ export const environment: Environment = {
   debug: false,
   production: false,
   urls: {
-    api: import.meta.env.VITE_APP_HOST,
+    api: import.meta.env.VITE_APP_API_HOST,
     accounts: "/accounts",
   },
 };
