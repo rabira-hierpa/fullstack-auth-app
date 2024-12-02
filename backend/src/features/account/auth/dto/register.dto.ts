@@ -4,11 +4,17 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
+  IsString,
   Matches,
   MinLength,
 } from 'class-validator';
 import { Index } from 'typeorm';
 
+export class CheckEmailDto {
+  @ApiProperty()
+  @IsString()
+  email: string;
+}
 export class RegisterDto {
   @ApiProperty({ example: 'John ', description: 'First name' })
   @IsNotEmpty()
