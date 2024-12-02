@@ -5,7 +5,6 @@ import { constants } from "../lib/constants/constants";
 import { castUserToAuthUser } from "../lib/helpers";
 import { AuthState, User, USER_ROLES } from "../lib/models";
 import { storage, logger, alert } from "../lib/services";
-import { LogoutEvent } from "../lib/utilities/logout.event";
 import { Environment } from "../lib/types/environment.type";
 import { AuthObservable } from "../lib/utilities/auth.observable";
 import { useNavigate } from "react-router-dom";
@@ -145,14 +144,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
 
   useEffect(() => {
     retrieveAuthState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    LogoutEvent.addLogoutRequestEventListener(logout);
-    return () => {
-      LogoutEvent.removeLogoutRequestEventListener();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
