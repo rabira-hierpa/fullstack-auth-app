@@ -56,6 +56,9 @@ This is a fullstack authentication application built with React, TailwindCSS, An
 - User authentication with JWT
 - RESTful API with NestJS
 - MongoDB Database integration with TypeORM
+- Role based access control
+
+> To add a user as an admin please update the `roles` field in the database to `["admin"]`. This can be done using a tool like MongoDB Compass.This will be automated in the future.
 
 ### Setup
 
