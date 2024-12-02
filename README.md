@@ -20,6 +20,7 @@ This is a fullstack authentication application built with React, TailwindCSS, An
 - User registration and login
 - Form validation with Ant Design
 - Responsive design with TailwindCSS
+- Feature-Based design pattern
 
 ### Setup
 
