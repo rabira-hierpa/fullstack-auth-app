@@ -16,6 +16,7 @@ import {
   createRefreshToken,
 } from 'src/shared/helper/jwt.healper';
 import { Repository } from 'typeorm';
+import { UserDecodeDto } from '../../user/dtos/user.dto';
 import { UserService } from '../../user/services/user.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
@@ -80,7 +81,7 @@ export class AuthService {
     };
   }
 
-  async register(userDto: RegisterDto): Promise<UserEntity> {
+  async register(userDto: RegisterDto): Promise<UserDecodeDto> {
     //check if user with this email already exists
     const existingUser = await this.userService.findByEmail(userDto.email);
     if (existingUser) {
@@ -104,6 +105,6 @@ export class AuthService {
 
     // Register the user
     const user = await this.userRepo.save(this.userRepo.create(userDto));
-    return user;
+    return userToUserDecodeDto(user);
   }
 }
