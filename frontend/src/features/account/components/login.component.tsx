@@ -55,8 +55,8 @@ const Login = () => {
       name="login"
       onFinish={onFinish}
       initialValues={{
-        email: "three@gmail.la",
-        password: "password123!",
+        email: "",
+        password: "",
       }}
     >
       <TopHeader

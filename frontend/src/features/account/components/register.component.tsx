@@ -74,11 +74,11 @@ const Register = () => {
       name="register"
       onFinish={onFinish}
       initialValues={{
-        firstName: "One",
-        lastName: "User",
-        email: "one@grr.la",
-        password: "password123!",
-        confirmPassword: "password123!",
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       }}
       scrollToFirstError
     >
