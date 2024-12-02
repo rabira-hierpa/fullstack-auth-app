@@ -23,3 +23,10 @@ export const registerApi = async (user: User) => {
     .then(handleResponse)
     .catch(handleError);
 };
+export const isEmailExistApi = (email: string) => {
+  return httpService
+    .post(`${accountEndpoint.isEmailExist}`, { email: email })
+    .then((response) => {
+      return response?.data;
+    });
+};

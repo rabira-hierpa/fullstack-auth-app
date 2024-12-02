@@ -1,27 +1,14 @@
 import { Spin } from "antd/es";
-import { lazy, Suspense, useContext, useEffect } from "react";
-import { Route, useNavigate, Routes, Navigate } from "react-router-dom";
-import { AuthContext } from "../../shared/context/auth.context";
+import { lazy, Suspense } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
 import ConfirmationPage from "./components/comfirmation.component";
 import ForgotPassword from "./components/forgot.password.component";
 import ResetPassword from "./components/reset.password.component";
-import useShouldRedirectToDashboard from "../../shared/lib/utilities/use-should-redirect-to-dashboard";
 
 const LoginPage = lazy(() => import("./components/login.component"));
 const RegisterPage = lazy(() => import("./components/register.component"));
 
 function AccountPage() {
-  const navigate = useNavigate();
-  const auth = useContext(AuthContext);
-  const shouldRedirectToDashboard = useShouldRedirectToDashboard();
-
-  useEffect(() => {
-    if (shouldRedirectToDashboard && !window.opener) {
-      navigate("/dashboard");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth?.isAuthenticated, shouldRedirectToDashboard]);
-
   return (
     <div>
       <div className="flex my-8 justify-center">

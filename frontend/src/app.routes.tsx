@@ -35,6 +35,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/account/*" element={<AccountPage />} />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
       <Route
         path="/dashboard"
         element={<AuthenticatedRoute component={<DashboardPage />} />}

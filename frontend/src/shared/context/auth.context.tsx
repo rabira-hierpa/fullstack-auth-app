@@ -2,12 +2,12 @@ import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useCallback, useEffect } from "react";
 import { useAuthAPI } from "../../features/account/apis/use-auth-api";
 import { constants } from "../lib/constants/constants";
-import { castUserToAuthUser } from "../lib/helpers";
 import { AuthState, User, USER_ROLES } from "../lib/models";
 import { storage, logger, alert } from "../lib/services";
 import { Environment } from "../lib/types/environment.type";
 import { AuthObservable } from "../lib/utilities/auth.observable";
 import { useNavigate } from "react-router-dom";
+import { castUserToAuthUser } from "../lib/helpers/cast-user-to-auth-user";
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
