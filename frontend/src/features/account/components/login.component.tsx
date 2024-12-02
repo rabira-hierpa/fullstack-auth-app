@@ -16,23 +16,29 @@ const Login = () => {
 
   const onFinish = async (values: Credentials) => {
     try {
-      const response = await loginApi(values);
-      if (response.accessToken) {
-        storage.setItem("accessToken", response?.accessToken?.accessToken);
-      }
-      if (authContext && authContext.setAuthState) {
-        authContext.setAuthState({
-          token: response?.accessToken?.accessToken,
-          user: response?.user,
-          expiresAt: (
-            Date.now() +
-            response?.accessToken?.expiresIn * 1000
-          ).toString(),
-        });
-        navigate("/dashboard");
-      } else {
-        alert.error("Failed to login user");
-      }
+      loginApi(values).then(
+        (response) => {
+          if (response.accessToken) {
+            storage.setItem("accessToken", response?.accessToken?.accessToken);
+          }
+          if (authContext && authContext.setAuthState) {
+            authContext.setAuthState({
+              token: response?.accessToken?.accessToken,
+              user: response?.user,
+              expiresAt: (
+                Date.now() +
+                response?.accessToken?.expiresIn * 1000
+              ).toString(),
+            });
+            navigate("/dashboard");
+          } else {
+            alert.error("Failed to login user");
+          }
+        },
+        (err) => {
+          alert.error(formatErrorMessage(err));
+        }
+      );
     } catch (error: any) {
       alert.error(formatErrorMessage(error));
     }
