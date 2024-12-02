@@ -36,8 +36,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
   const navigate = useNavigate();
   const [authState, setAuthState] = useState<AuthState>();
   const { getCurrentUserApi } = useAuthAPI(environment);
-  // indicator whether a user is in the process of logging in or out
-  // and indicator whether reading auth details from browser storage (IndexDB) has finished
   const [loading, setLoading] = useState(true);
 
   AuthObservable.getInstance().subscribe(async (authInfo) => {
