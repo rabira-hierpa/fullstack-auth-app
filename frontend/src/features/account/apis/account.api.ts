@@ -7,7 +7,6 @@ import { accountEndpoint } from "./api.endpoint";
 const handleResponse = (response: any) => response?.data;
 
 const handleError = (error: APIError) => {
-  console.error("API call failed. Error: ", error);
   throw error;
 };
 
