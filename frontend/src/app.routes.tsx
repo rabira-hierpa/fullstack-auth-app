@@ -6,8 +6,9 @@ import AccountPage from "./features/account";
 import { LoadingSpinner } from "./shared/ui/spinner/loading.spinner";
 import { AuthContext } from "./shared/context/auth.context";
 import AppLayout from "./shared/layout/app.layout";
-const DashboardPage = React.lazy(() => import("./features/dashboard/page"));
 
+const DashboardPage = React.lazy(() => import("./features/dashboard/page"));
+const AdminPage = React.lazy(() => import("./features/admin/page"));
 interface AuthenticatedRouteProps {
   component: React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,6 +21,19 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
   const auth = useContext(AuthContext);
   const location = useLocation();
   return auth.isAuthenticated && auth.isAuthenticated() ? (
+    <AppLayout>{component}</AppLayout>
+  ) : (
+    <Navigate to="/account/login" state={{ from: location.pathname }} />
+  );
+};
+
+const AdminRoute: React.FC<AuthenticatedRouteProps> = ({ component }) => {
+  const auth = useContext(AuthContext);
+  const location = useLocation();
+  return auth.isAuthenticated &&
+    auth.isAuthenticated() &&
+    auth.isAdmin &&
+    auth.isAdmin() ? (
     <AppLayout>{component}</AppLayout>
   ) : (
     <Navigate to="/account/login" state={{ from: location.pathname }} />
@@ -40,6 +54,7 @@ export function AppRoutes() {
         path="/dashboard"
         element={<AuthenticatedRoute component={<DashboardPage />} />}
       />
+      <Route path="/admin" element={<AdminRoute component={<AdminPage />} />} />
     </Routes>
   );
 }
