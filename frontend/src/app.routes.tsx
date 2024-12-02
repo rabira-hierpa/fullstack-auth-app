@@ -6,9 +6,6 @@ import AccountPage from "./features/account";
 import { LoadingSpinner } from "./shared/ui/spinner/loading.spinner";
 import { AuthContext } from "./shared/context/auth.context";
 import AppLayout from "./shared/layout/app.layout";
-import { alert, logger } from "./shared/lib/services";
-import { formatErrorMessage } from "./shared/lib/helpers/format.error";
-
 const DashboardPage = React.lazy(() => import("./features/dashboard/page"));
 
 interface AuthenticatedRouteProps {
@@ -31,25 +28,6 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
 
 export function AppRoutes() {
   const auth = useContext(AuthContext);
-  const [userHasPersona] = React.useState<boolean>(true);
-
-  // const callGetMyPersona = React.useCallback(() => {
-  //   if (auth?.authState?.expiresAt)
-  //     getMyPersonaApi().then(
-  //       (myPersonaResponse) => {
-  //         setUserHasPersona(!!myPersonaResponse?.length);
-  //       },
-  //       (error) => {
-  //         const _errorMessage = formatErrorMessage(error?.data);
-  //         logger.error(error);
-  //         alert.error(_errorMessage);
-  //       }
-  //     );
-  // }, [auth?.authState?.expiresAt]);
-
-  // React.useEffect(() => {
-  //   callGetMyPersona();
-  // }, [callGetMyPersona]);
 
   if (auth?.loading) {
     return <LoadingSpinner fullScreen={true} />;
