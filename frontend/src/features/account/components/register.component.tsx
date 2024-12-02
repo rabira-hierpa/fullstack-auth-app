@@ -6,6 +6,7 @@ import { registerApi } from "../apis/account.api";
 import { User } from "../../../shared/lib/models";
 import { alert } from "../../../shared/lib/services";
 import { formatErrorMessage } from "../../../shared/lib/helpers/format.error";
+import { TopHeader } from "../ui/header";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,17 +15,15 @@ const Register = () => {
   const onFinish = async (values: User) => {
     registerApi(values)
       .then(
-        (response) => {
+        () => {
           alert.success("Registration Successful!");
           navigate("/account/login");
         },
         (err) => {
-          console.error("Registration failed:", err);
           alert.error(formatErrorMessage(err));
         }
       )
-      .catch((err) => {
-        // console.error("Registration failed:", err);
+      .catch(() => {
         alert.error("Something went wrong", "Please try again!");
       });
   };
@@ -43,6 +42,11 @@ const Register = () => {
       }}
       scrollToFirstError
     >
+      <TopHeader
+        className=" mb-8"
+        title="Welcome"
+        caption="Register your account to get started."
+      />
       <Form.Item
         name="firstName"
         rules={[{ required: true, message: "Please input your First Name!" }]}
@@ -98,7 +102,7 @@ const Register = () => {
             message: "Please input your Password!",
           },
           ({ getFieldValue }) => ({
-            validator(rule, value) {
+            validator(_rule, value) {
               if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
