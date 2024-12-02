@@ -54,7 +54,7 @@ This is a fullstack authentication application built with React, TailwindCSS, An
 
 - User authentication with JWT
 - RESTful API with NestJS
-- Database integration with TypeORM
+- MongoDB Database integration with TypeORM
 
 ### Setup
 
