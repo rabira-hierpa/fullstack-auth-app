@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsString } from 'class-validator';
 
 export class UserDecodeDto {
   @IsString()
@@ -16,4 +16,7 @@ export class UserDecodeDto {
 
   @IsString()
   fullName: string;
+
+  @IsArray()
+  roles: string[];
 }
