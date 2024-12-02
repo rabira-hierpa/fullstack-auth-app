@@ -94,7 +94,7 @@ export class AuthService {
       );
     }
     //TODO: Apply the password policy
-    if (passwordStrength(userDto.password).id < 1) {
+    if (passwordStrength(userDto.password).id < 2) {
       throw new BadRequestException('Password too weak');
     }
 
