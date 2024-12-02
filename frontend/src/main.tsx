@@ -3,10 +3,10 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "antd/dist/reset.css"; // For Ant Design v5+
 import { AuthProvider } from "./shared/context/auth.context.tsx";
-import { environment } from "./features/account/environments/environment.dev.ts";
 import { LoadingSpinner } from "./shared/ui/spinner/loading.spinner.tsx";
 import AppRoutes from "./app.routes.tsx";
 import { BrowserRouter } from "react-router-dom";
+import { environment } from "./environments/environment.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
