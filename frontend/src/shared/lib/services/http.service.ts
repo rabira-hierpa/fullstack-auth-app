@@ -2,7 +2,6 @@ import axios from "axios";
 import { constants } from "../constants/constants";
 import { alert, logger } from "../services";
 import { AuthObservable } from "../utilities/auth.observable";
-import { LogoutEvent } from "../utilities/logout.event";
 import { storage } from "./storage.service";
 
 const axiosService = () => {
@@ -31,7 +30,6 @@ const axiosService = () => {
         const { status, data } = error.response;
 
         if (status === 401) {
-          LogoutEvent.requestLogout();
           storage.setItem("accessToken", null);
           logger.info("401");
         } else if (status === 400 && data?.accessToken) {
