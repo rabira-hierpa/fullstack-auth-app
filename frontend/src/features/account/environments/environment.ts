@@ -7,7 +7,7 @@ export const environment: Environment = {
   debug: false,
   production: false,
   urls: {
-    api: "http://localhost:4000",
+    api: import.meta.env.VITE_APP_HOST,
     accounts: "/accounts",
   },
 };
