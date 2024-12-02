@@ -5,23 +5,28 @@ import { useNavigate } from "react-router-dom";
 import { registerApi } from "../apis/account.api";
 import { User } from "../../../shared/lib/models";
 import { alert } from "../../../shared/lib/services";
+import { formatErrorMessage } from "../../../shared/lib/helpers/format.error";
 
 const Register = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const onFinish = async (values: User) => {
-    try {
-      registerApi(values).then((response) => {
-        console.log({ data: response });
+    registerApi(values)
+      .then(
+        (response) => {
+          alert.success("Registration Successful!");
+          navigate("/account/login");
+        },
+        (err) => {
+          console.error("Registration failed:", err);
+          alert.error(formatErrorMessage(err));
+        }
+      )
+      .catch((err) => {
+        // console.error("Registration failed:", err);
+        alert.error("Something went wrong", "Please try again!");
       });
-      alert.success("Registration Successful!");
-      navigate("/account/login");
-    } catch (error) {
-      console.error("Registration failed:", error);
-      // Handle registration error (e.g., show an error message)
-      alert.error("Please try again", "Failed to register user");
-    }
   };
 
   return (
