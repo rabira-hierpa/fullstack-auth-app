@@ -27,6 +27,10 @@ export class UserEntity extends AbstractEntity {
   @Exclude()
   token: string;
 
+  @ApiProperty()
+  @Column()
+  roles: string[];
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);

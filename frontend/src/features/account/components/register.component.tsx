@@ -51,11 +51,20 @@ const Register = () => {
           navigate("/account/login");
         },
         (err) => {
-          alert.error(formatErrorMessage(err));
+          alert.error(
+            formatErrorMessage({
+              ...err,
+              data: {
+                ...err.data,
+                message:
+                  "Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
+              },
+            })
+          );
         }
       )
-      .catch(() => {
-        alert.error("Something went wrong", "Please try again!");
+      .catch((error) => {
+        alert.error("Something went wrong", formatErrorMessage(error));
       });
   };
 
@@ -65,11 +74,11 @@ const Register = () => {
       name="register"
       onFinish={onFinish}
       initialValues={{
-        firstName: "One",
-        lastName: "User",
-        email: "one@grr.la",
-        password: "password123!",
-        confirmPassword: "password123!",
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       }}
       scrollToFirstError
     >

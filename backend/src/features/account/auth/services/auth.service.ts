@@ -72,7 +72,6 @@ export class AuthService {
     const refreshToken = createRefreshToken(userData);
 
     user.token = accessToken.accessToken;
-
     this.logger.log(`${user.email} logged in successfully`);
     return {
       user: { ...userToUserDecodeDto(user) },
@@ -102,6 +101,7 @@ export class AuthService {
 
     const token = this.generateToken();
     userDto.token = token;
+    userDto.roles = ['user'];
 
     // Register the user
     const user = await this.userRepo.save(this.userRepo.create(userDto));

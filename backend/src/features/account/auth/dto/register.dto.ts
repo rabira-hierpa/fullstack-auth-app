@@ -44,4 +44,8 @@ export class RegisterDto {
   @ApiProperty()
   @Exclude()
   token: string;
+
+  @ApiProperty()
+  @Exclude()
+  roles: string[];
 }
