@@ -105,6 +105,7 @@ export class AuthService {
 
     // Register the user
     const user = await this.userRepo.save(this.userRepo.create(userDto));
+    this.logger.log(`${user.email} registered successfully`);
     return userToUserDecodeDto(user);
   }
 }
