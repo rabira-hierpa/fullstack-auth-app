@@ -1,16 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button } from "antd";
 import { MailOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { registerApi } from "../apis/account.api";
+import { isEmailExistApi, registerApi } from "../apis/account.api";
 import { User } from "../../../shared/lib/models";
 import { alert } from "../../../shared/lib/services";
 import { formatErrorMessage } from "../../../shared/lib/helpers/format.error";
 import { TopHeader } from "../ui/header";
+import useDebounce from "../../../shared/hooks/useDebounce";
 
 const Register = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [email, setEmail] = useState();
+  const [emailValue] = useDebounce(email, 800);
+  const [feedBack, setFeedBack] = useState("");
+  const [validationStatus, setValidationStatus] = useState<
+    "" | "success" | "warning" | "error" | "validating" | undefined
+  >("");
+
+  const isEmailExist = () => {
+    if (!emailValue) return;
+
+    isEmailExistApi(String(emailValue).trim())
+      .then((response) => {
+        if (response.isExist) {
+          setValidationStatus("error");
+          setFeedBack("Email already exists!");
+        } else {
+          setValidationStatus("success");
+          setFeedBack("");
+          return Promise.resolve();
+        }
+      })
+      .catch((error) => {
+        setValidationStatus("error");
+        return Promise.reject(new Error(error?.message));
+      });
+  };
+
+  useEffect(() => {
+    isEmailExist();
+  }, [emailValue]);
 
   const onFinish = async (values: User) => {
     registerApi(values)
@@ -63,11 +94,23 @@ const Register = () => {
 
       <Form.Item
         name="email"
+        help={feedBack}
+        hasFeedback
+        validateStatus={validationStatus}
         rules={[
           {
             type: "email",
             message: "The input is not valid E-mail!",
           },
+          () => ({
+            async validator(rule, value) {
+              if (value === "") {
+                return setValidationStatus("error");
+              } else {
+                setEmail(value);
+              }
+            },
+          }),
           {
             required: true,
             message: "Please input your E-mail!",
