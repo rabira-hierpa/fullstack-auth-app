@@ -4,13 +4,9 @@
 export const environment = {
   version: "##buildNumber##",
   debug: false,
-  production: true,
-  googleClientId:
-    "477478808814-ktihku8km9hccs496730d687rasgi7bh.apps.googleusercontent.com",
-  facebookAppId: "880819489237511",
+  production: false,
   urls: {
     api: "http://localhost:4000",
-    logServer: "/logServer",
     accounts: "/accounts",
   },
 };

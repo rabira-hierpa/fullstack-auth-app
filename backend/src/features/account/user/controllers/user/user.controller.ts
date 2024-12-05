@@ -5,6 +5,7 @@ import {
   Inject,
   UseGuards,
 } from '@nestjs/common';
+import { UserEntity } from 'src/entities/user.entity';
 import { Auth } from 'src/features/account/auth/decorators/auth.decorator';
 import { AllowedRoles } from 'src/features/account/auth/enums/allowedRoles.enum';
 import { JwtAuthGuard } from 'src/features/account/auth/guards/jwt-auth.guard';
@@ -22,12 +23,12 @@ export class UserController {
   ) {}
 
   @Get('getCurrentUser')
-  async GetCurrentUser(@User() user) {
+  async GetCurrentUser(@User() user: UserEntity) {
     try {
       const _user = await this.userService.findByEmail(user.email);
       return userToUserDecodeDto(_user);
     } catch (ex) {
-      return new BadRequestException(ex);
+      throw new BadRequestException(ex);
     }
   }
 
