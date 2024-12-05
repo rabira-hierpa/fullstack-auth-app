@@ -3,7 +3,7 @@ import { UserDecodeDto } from 'src/features/account/user/dtos/user.dto';
 
 export const createAccessToken = (user: UserDecodeDto) => {
   // status. role,
-  const expiresIn = 604800;
+  const expiresIn = 604800; // 1 week
 
   const accessToken = jwt.sign(
     {
